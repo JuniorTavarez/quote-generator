@@ -1,9 +1,19 @@
-const quote = document.getElementById('quote');
+const quoteContainer = document.getElementById('quote-Container');
+const quoteText = document.getElementById('quote');
 const author = document.getElementById('author');
-const newQuote = document.getElementById('new-quote');
+const newQuoteBtn = document.getElementById('new-quote');
+const twitter = document.getElementById('twitter');
 
-console.log(quote.innerText);
 let apiQuotes = [];
+
+const newQuote = function () {
+  const quote = apiQuotes[Math.floor(Math.random() * apiQuotes.length)];
+
+  quoteText.innerText = quote.text;
+  author.innerText = quote.author ? quote.author : 'Unknown';
+
+  newQuoteBtn.addEventListener('click', newQuote);
+};
 
 // Get Quotes From API
 async function getQuotes() {
@@ -11,19 +21,7 @@ async function getQuotes() {
   try {
     const response = await fetch(apiUrl);
     apiQuotes = await response.json();
-
-    const randomNumber = function () {
-      return Math.floor(Math.random() * apiQuotes.length - 1) + 1;
-    };
-
-    quote.innerHTML = apiQuotes[randomNumber()].text;
-    author.innerHTML = apiQuotes[randomNumber()].author;
-
-    newQuote.addEventListener('click', function () {
-      quote.innerHTML = apiQuotes[randomNumber()].text;
-      author.innerHTML = apiQuotes[randomNumber()].author;
-    });
-    apiQuotes.length;
+    newQuote();
   } catch (error) {
     //    Carch Error Here
   }
@@ -31,3 +29,4 @@ async function getQuotes() {
 
 // On Load
 getQuotes();
+// newQuote();
